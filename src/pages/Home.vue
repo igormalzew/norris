@@ -1,13 +1,30 @@
 <template>
   <div id="home">
-    <img src="../assets/images/chuk.gif">
+    <img src="../assets/images/chuk.gif" />
 
-    <div class="btn-block">
-      <Button title="Получить шутку" :isDisabled="isJokeLoading" @click="getRandomJoke"/>
-      <Button :title="autoGettingBtnTitle" :isDisabled="isJokeLoading" @click="jokeAutoGettingClickHandler"/>
+    <div class="btns-container">
+      <div class="item">
+        <Button
+          title="Получить шутку"
+          class="btn-primary"
+          :isDisabled="isJokeLoading"
+          @click="getRandomJoke"
+        />
+      </div>
+
+      <div class="item">
+        <Button
+          :title="autoGettingBtnTitle"
+          class="btn-warning"
+          :isDisabled="isJokeLoading"
+          @click="jokeAutoGettingClickHandler"
+        />
+      </div>
     </div>
 
-    <JokeBox :title="joke.value" :iconUrl="joke.icon_url"/>
+    <div class="joke-box-container">
+      <JokeBox :title="joke.value" :iconUrl="joke.icon_url" />
+    </div>
   </div>
 </template>
 
@@ -34,28 +51,29 @@ export default {
     };
   },
   created() {
-    console.log('created')
+    this.getRandomJoke();
     this.switchOnJokeAutoGetting();
   },
   methods: {
-    switchOnJokeAutoGetting () {
-      this.remainingTimeUntilGetting = 9;
-            console.log(this.remainingTimeUntilGettingJoke)
+    switchOnJokeAutoGetting() {
+      this.remainingTimeUntilGettingJoke = GETTING_JOKE_INTERVAL;
 
-      if(this.remainingTimeUntilGetting === 0) {
-        console.log('this.remainingTimeUntilGetting === 0')
-        this.getRandomJoke();
-        this.remainingTimeUntilGetting = GETTING_JOKE_INTERVAL;
-      }
+      this.autoGettingIntervalId = setInterval(() => {
+        this.remainingTimeUntilGettingJoke--;
+
+        if (this.remainingTimeUntilGettingJoke === 0) {
+          this.getRandomJoke();
+          this.remainingTimeUntilGettingJoke = GETTING_JOKE_INTERVAL;
+        }
+      }, 1000);
     },
-    switchOffJokeAutoGetting () {
-      //console.log(this.autoGettingIntervalId)
+    switchOffJokeAutoGetting() {
       clearInterval(this.autoGettingIntervalId);
     },
-    jokeAutoGettingClickHandler () {
+    jokeAutoGettingClickHandler() {
       this.isAutoGettingJoke = !this.isAutoGettingJoke;
 
-      if(!this.isAutoGettingJoke) {
+      if (!this.isAutoGettingJoke) {
         this.switchOffJokeAutoGetting();
       } else {
         this.switchOnJokeAutoGetting();
@@ -66,25 +84,38 @@ export default {
     })
   },
   computed: {
-    autoGettingBtnTitle () {
-      return this.isAutoGettingJoke ? this.remainingTimeUntilGettingJoke.toString() : "Получать автоматически";
+    autoGettingBtnTitle() {
+      return this.isAutoGettingJoke
+        ? this.remainingTimeUntilGettingJoke.toString()
+        : "Получать автоматически";
     },
-    joke () {
+    joke() {
       return this.$store.state.joke.currentJoke;
     }
   }
 };
 </script>
 
-<style>
+<style scoped>
 #home {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  padding: 2em;
 }
 
-.btn-block {
-
+.btns-container {
+  display: flex;
+  width: 100%;
 }
-</style>
+.btns-container > .item {
+  padding: 0.5em;
+  width: 100%;
+}
+
+.joke-box-container {
+  padding: 0.5em;
+  width: 100%;
+}
+</style>>

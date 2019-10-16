@@ -1,7 +1,6 @@
 <template>
-  <div class="joke-box">
-    <h2>{{ title }}</h2>
-    <img :src="iconUrl" alt>
+  <div class="jumbotron joke-box">
+    <span class="display-6">{{ title }}</span>
   </div>
 </template>
 
@@ -17,9 +16,6 @@ export default {
 
 <style scoped>
 .joke-box {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
+  
 }
 </style>

@@ -1,6 +1,11 @@
 <template>
-  <button @click="handleClick" class="btn" :class="{ 'btn-disabled': isDisabled }">
-    <span>{{ title }}</span>
+  <button 
+    type="button"
+    @click="handleClick" 
+    class="btn btn-main"
+    :class="className" 
+    :disabled="isDisabled">
+      {{ title }}
   </button>
 </template>
 
@@ -9,7 +14,8 @@ export default {
   name: "Button",
   props: {
     title: String,
-    isDisabled: Boolean
+    isDisabled: Boolean,
+    className: String
   },
   methods: {
     handleClick: function() {
@@ -22,17 +28,7 @@ export default {
 </script>
 
 <style scoped>
-.btn {
-  cursor: pointer;
-  width: 12em;
-  height: 4em;
-  border-radius: 0.2em;
-  background-color: #d23232;
-  color: #fff;
-  cursor: pointer;
-}
-
-.btn-disabled {
-  background-color: gray;
-}
+  .btn-main {
+    width: 100%
+  }
 </style>
