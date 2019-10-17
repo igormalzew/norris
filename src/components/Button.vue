@@ -1,11 +1,11 @@
 <template>
-  <button 
+  <button
     type="button"
-    @click="handleClick" 
-    class="btn btn-main"
-    :class="className" 
+    @click="handleClick"
+    class="btn container"
+    :class="className"
     :disabled="isDisabled">
-      {{ title }}
+      {{ text }}
   </button>
 </template>
 
@@ -13,7 +13,7 @@
 export default {
   name: "Button",
   props: {
-    title: String,
+    text: String,
     isDisabled: Boolean,
     className: String
   },
@@ -26,9 +26,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-  .btn-main {
-    width: 100%
-  }
-</style>

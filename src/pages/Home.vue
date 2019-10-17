@@ -1,38 +1,39 @@
 <template>
-  <div id="home">
-    <img src="../assets/images/chuk.gif" />
+  <div class="container-fluid home-page">
+    <div class="row m-4 d-flex justify-content-center">
+      <img src="../assets/images/chuk.gif" />
+     </div>
 
-    <div class="btns-container">
-      <div class="item">
-        <Button
-          title="Получить шутку"
-          class="btn-primary"
-          :isDisabled="isJokeLoading"
-          @click="getRandomJoke"
-        />
-      </div>
-
-      <div class="item">
-        <Button
-          :title="autoGettingBtnTitle"
-          class="btn-warning"
-          :isDisabled="isJokeLoading"
-          @click="jokeAutoGettingClickHandler"
-        />
-      </div>
+    <div class="row">
+        <div class="col mb-4">
+          <Button
+            text="Получить шутку"
+            class="btn-primary"
+            :isDisabled="isJokeLoading"
+            @click="getRandomJoke"
+          />
+        </div>
+        <div class="col mb-4">
+          <Button
+            :text="autoGettingBtnText"
+            class="btn-warning"
+            :isDisabled="isJokeLoading"
+            @click="jokeAutoGettingClickHandler"
+          />
+        </div>
     </div>
 
-    <div class="joke-box-container">
-      <JokeBox :title="joke.value" :iconUrl="joke.icon_url" />
+    <div class="row">
+      <div class="col">
+        <TextBox :text="joke.value" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
-
 import Button from "@/components/Button";
-import JokeBox from "@/components/JokeBox";
+import TextBox from "@/components/TextBox";
 
 const GETTING_JOKE_INTERVAL = 10;
 
@@ -40,7 +41,7 @@ export default {
   name: "Home",
   components: {
     Button,
-    JokeBox
+    TextBox
   },
   data() {
     return {
@@ -79,12 +80,14 @@ export default {
         this.switchOnJokeAutoGetting();
       }
     },
-    ...mapActions({
-      getRandomJoke: "joke/getRandomJoke"
-    })
+    getRandomJoke() {
+      this.isJokeLoading = true;
+      this.$store.dispatch("joke/getRandomJoke")
+        .finally(() => this.isJokeLoading = false);
+    }
   },
   computed: {
-    autoGettingBtnTitle() {
+    autoGettingBtnText() {
       return this.isAutoGettingJoke
         ? this.remainingTimeUntilGettingJoke.toString()
         : "Получать автоматически";
@@ -97,25 +100,7 @@ export default {
 </script>
 
 <style scoped>
-#home {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  padding: 2em;
+.home-page {
+  max-width: 800px;
 }
-
-.btns-container {
-  display: flex;
-  width: 100%;
-}
-.btns-container > .item {
-  padding: 0.5em;
-  width: 100%;
-}
-
-.joke-box-container {
-  padding: 0.5em;
-  width: 100%;
-}
-</style>>
+</style>
